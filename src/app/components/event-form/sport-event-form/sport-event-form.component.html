@@ -1,0 +1,19 @@
+<app-base-event-form
+  [extraFields]="sportTemplate"
+  [extraControls]="{ participants: ['', Validators.required] }"
+  (formResult)="formResult.emit($event)"
+></app-base-event-form>
+
+<ng-template #sportTemplate>
+  <div class="form__field">
+    <label class="form__label" for="participants">Количество участников *</label>
+    <input
+      pInputText
+      type="number"
+      id="participants"
+      formControlName="participants"
+      class="form__input"
+      placeholder="Введите количество участников"
+    />
+  </div>
+</ng-template>

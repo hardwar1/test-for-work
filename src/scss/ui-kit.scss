@@ -1,0 +1,45 @@
+.btn {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 20px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 20px;
+  background-color: transparent;
+  outline: 0;
+  transition: transform 0.3s;
+
+  &::after,
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: -2;
+    border-radius: 20px;
+    width: 0;
+    height: 100%;
+    transition:
+      width 0.3s,
+      opacity 0.3s;
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+
+  &::after {
+    z-index: -1;
+    background-color: var(--color-gray-400);
+  }
+
+  &:hover:not(:disabled)::after,
+  &:focus-visible:not(:disabled)::after {
+    width: 100%;
+    opacity: 1;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+}

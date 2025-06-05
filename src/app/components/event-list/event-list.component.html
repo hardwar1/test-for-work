@@ -1,0 +1,82 @@
+<div class="events">
+  <div class="container">
+    <h1 class="events__title">Список мероприятий</h1>
+
+    <ul class="menu">
+      <li class="menu__item">
+        <button class="menu__button" appBtn (click)="showDialog('base')">
+          Мероприятие
+          <span class="plus"></span>
+        </button>
+      </li>
+      <li class="menu__item">
+        <button class="menu__button" appBtn (click)="showDialog('sport')">
+          Спортивное мероприятие
+          <span class="plus"></span>
+        </button>
+      </li>
+      <li class="menu__item">
+        <button class="menu__button" appBtn (click)="showDialog('music')">
+          Музыкальное мероприятие
+          <span class="plus"></span>
+        </button>
+      </li>
+    </ul>
+
+    <table class="events-table">
+      <thead>
+        <tr class="events-table__tr">
+          <th class="events-table__th">Название</th>
+          <th class="events-table__th">Описание</th>
+          <th class="events-table__th">Место проведения</th>
+          <th class="events-table__th">Тип</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (event of events; track event.id) {
+        <tr class="events-table__tr">
+          <td class="events-table__td">{{ event.title }}</td>
+          <td class="events-table__td">{{ event.description }}</td>
+          <td class="events-table__td">{{ event.location }}</td>
+          <td class="events-table__td">
+            <div class="events-table__type">
+              {{ event.type }}
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                size="small"
+                [outlined]="true"
+                (onClick)="deleteEvent(event.id)"
+              >
+              </p-button>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<p-dialog
+  [header]="`Добавить ${typeTitle} мероприятие`"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '800px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  @switch (typeDialog()) {
+    @case ('base') {
+      <app-base-event-form (formResult)="formResult($event)" />
+    }
+    @case ('sport') {
+      <app-sport-event-form (formResult)="formResult($event)" />
+    }
+    @case ('music') {
+      <app-music-event-form (formResult)="formResult($event)" />
+    }
+  }
+</p-dialog>

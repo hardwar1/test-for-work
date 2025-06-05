@@ -1,0 +1,63 @@
+<form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+  <div class="form">
+    <div class="form__field">
+      <label class="form__label" for="title">Название мероприятия *</label>
+      <input
+        class="form__input"
+        pInputText
+        id="title"
+        formControlName="title"
+        placeholder="Введите название мероприятия"
+      />
+    </div>
+
+    <!-- Поле описание -->
+    <div class="form__field">
+      <label class="form__label" for="description">Описание *</label>
+      <textarea
+        class="form__input"
+        pInputTextarea
+        id="description"
+        formControlName="description"
+        placeholder="Введите описание мероприятия"
+        rows="4"
+      >
+      </textarea>
+    </div>
+
+    <!-- Поле место проведения -->
+    <div class="form__field">
+      <label class="form__label" for="location">Место проведения *</label>
+      <input
+        class="form__input"
+        pInputText
+        id="location"
+        formControlName="location"
+        placeholder="Введите место проведения"
+      />
+    </div>
+
+    <ng-container *ngTemplateOutlet="extraFields()"></ng-container>
+  </div>
+
+  <!-- Кнопки -->
+  <div class="form__buttons">
+    <p-button
+      label="Отмена"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      type="button"
+      [disabled]="!this.eventForm.valid"
+      (onClick)="onCancel()"
+    >
+    </p-button>
+    <p-button
+      label="Сохранить"
+      icon="pi pi-check"
+      type="submit"
+      [disabled]="eventForm.invalid"
+    >
+    </p-button>
+  </div>
+</form>

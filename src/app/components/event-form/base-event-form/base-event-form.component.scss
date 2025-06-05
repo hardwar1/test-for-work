@@ -1,0 +1,27 @@
+.form {
+  &__field {
+    margin-bottom: 26px;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  &__input {
+    display: block;
+    width: 100%;
+    margin-bottom: 4px;
+    resize: vertical;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__error {
+    color: red;
+  }
+}
+
