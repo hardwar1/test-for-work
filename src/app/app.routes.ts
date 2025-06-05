@@ -9,6 +9,7 @@ export const routes: Routes = [
   },
   {
     path: 'main',
+    title: 'Тестовое в Юнитесс',
     component: EventListComponent,
   },
   {

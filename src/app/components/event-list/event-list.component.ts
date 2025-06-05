@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { IEvent } from '../../shared/models/IEvent';
 import { ButtonModule } from 'primeng/button';
 import { BtnDirective } from '../../shared/ui-kit/button.directive';
@@ -30,7 +30,7 @@ export const mockEvents: IEvent[] = [
     description:
       'Изучаем современные подходы к фронтенд разработке. Angular, React, Vue.js. Практические примеры и live coding.',
     location: 'IT-Hub, конференц-зал А',
-    type: 'seminar',
+    type: 'base',
   },
   {
     id: 4,
@@ -38,7 +38,7 @@ export const mockEvents: IEvent[] = [
     description:
       'Неформальная встреча Angular-разработчиков. Обмен опытом, нетворкинг, обсуждение новых фич фреймворка.',
     location: 'Коворкинг "Точка", 5 этаж',
-    type: 'meetup',
+    type: 'base',
   },
 ];
 
@@ -58,17 +58,32 @@ type TTypeTitle = '' | 'спортивное' | 'музыкальное';
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
 })
-export class EventListComponent {
-  events = mockEvents;
-  visible: boolean = false;
-  typeDialog = signal<TTypeDialog>('base');
-  typeTitle: TTypeTitle = '';
+export class EventListComponent implements OnInit {
+  protected events = signal<IEvent[]>([]); // <= состояние приложение в сигнале, спецом пишу вдруг, вопросы будут
+  protected visible: boolean = false;
+  protected typeDialog = signal<TTypeDialog>('base');
+  protected typeTitle: TTypeTitle = '';
+  protected eventForEdit = signal<IEvent | null>(null);
 
-  deleteEvent(id: number) {
-    console.log('Удаляем событие с ID:', id);
+  ngOnInit() {
+    this.loadData();
   }
 
-  showDialog(type: TTypeDialog) {
+  private loadData() {
+    const loaded = localStorage.getItem('eventList');
+
+    if (loaded) {
+      this.events.set(JSON.parse(loaded));
+    } else {
+      this.events.set(mockEvents);
+    }
+  }
+
+  private saveData() {
+    localStorage.setItem('eventList', JSON.stringify(this.events()));
+  }
+
+  protected showDialog(type: TTypeDialog) {
     this.typeDialog.set(type);
     switch (type) {
       case 'base':
@@ -85,16 +100,66 @@ export class EventListComponent {
     this.visible = true;
   }
 
-  formResult(data: any) {
-    console.log('Данные сохранены', data);
-    if (data) {
-      this.addEvent(data);
+  protected formResult(event: IEvent | null) {
+    if (event && !this.eventForEdit()) {
+      this.addEvent(event);
+    }
+
+    if (event && this.eventForEdit()) {
+      event.id = (this.eventForEdit() as IEvent).id;
+      this.eventForEdit.set(null);
+      this.saveEditEvent(event);
     }
 
     this.visible = false;
   }
 
-  addEvent(data: any) {
+  private addEvent(event: IEvent) {
+    if (event.participants) {
+      event.type = 'sport';
+    }
 
+    if (event.genreMusic) {
+      event.type = 'music';
+    }
+
+    if (!event.genreMusic && !event.participants) {
+      event.type = 'base';
+    }
+
+    event.id = new Date().getTime();
+
+    const saveEvents = this.events();
+    saveEvents.push(event);
+    this.events.set(saveEvents);
+
+    this.saveData();
+  }
+
+  protected deleteEvent(id: number) {
+    let newArray = this.events();
+    newArray = newArray.filter((event) => event.id !== id);
+    this.events.set(newArray);
+    this.saveData();
+  }
+
+  protected openEdit(editEvent: IEvent) {
+    this.eventForEdit.set(editEvent);
+    this.showDialog(editEvent.type);
+  }
+
+  private saveEditEvent(editEvent: IEvent) {
+    const updatedArray = this.events().map((event) => {
+      if (event.id === editEvent.id) {
+        return {
+          ...event,
+          ...editEvent,
+        };
+      }
+      return event;
+    });
+
+    this.events.set(updatedArray);
+    this.saveData();
   }
 }

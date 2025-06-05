@@ -5,6 +5,8 @@
 :root {
   --color-gray-300: #515050;
   --color-gray-400: #222222;
+  --color-primary: #3250d6;
+  --color-primary-hover: #002efb;
 }
 
 $breakpoint-xxl: 1600px;
@@ -15,17 +17,17 @@ $breakpoint-sm: 768px;
 $breakpoint-xs: 480px;
 
 .container {
-  max-width: 1500px;
-  padding: 0 15px;
   margin: 0 auto;
+  padding: 0 15px;
+  max-width: 1500px;
 
   @media (min-width: $breakpoint-md) {
     padding: 0 30px;
   }
 
   &--fluid {
-    max-width: unset;
     padding: 0 15px;
+    max-width: unset;
 
     @media (min-width: $breakpoint-lg) {
       padding: 0 30px;

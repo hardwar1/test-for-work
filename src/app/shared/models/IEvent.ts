@@ -1,8 +1,7 @@
 export type EventType =
   | 'sport'
   | 'music'
-  | 'seminar'
-  | 'meetup';
+  | 'base';
 
 export interface IEvent {
   id: number;
@@ -10,4 +9,6 @@ export interface IEvent {
   description: string;
   location: string;
   type: EventType;
+  genreMusic?: string;
+  participants?: number;
 }

@@ -1,6 +1,9 @@
 <div class="events">
   <div class="container">
-    <h1 class="events__title">Список мероприятий</h1>
+    <h1 class="events__title">
+      Список мероприятий в
+      <a class="link" target="_blank" href="https://hh.ru/vacancy/121157060?hhtmFrom=chat">Юнитесс</a>
+    </h1>
 
     <ul class="menu">
       <li class="menu__item">
@@ -30,16 +33,27 @@
           <th class="events-table__th">Описание</th>
           <th class="events-table__th">Место проведения</th>
           <th class="events-table__th">Тип</th>
-          <th></th>
         </tr>
       </thead>
 
       <tbody>
-        @for (event of events; track event.id) {
+        @for (event of events(); track event.id) {
         <tr class="events-table__tr">
-          <td class="events-table__td">{{ event.title }}</td>
-          <td class="events-table__td">{{ event.description }}</td>
-          <td class="events-table__td">{{ event.location }}</td>
+          <td class="events-table__td">
+            <button class="events-table__edit" (click)="openEdit(event)">
+              {{ event.title }}
+            </button>
+          </td>
+          <td class="events-table__td">
+            <button class="events-table__edit" (click)="openEdit(event)">
+              {{ event.description }}
+            </button>
+          </td>
+          <td class="events-table__td">
+            <button class="events-table__edit" (click)="openEdit(event)">
+              {{ event.location }}
+            </button>
+          </td>
           <td class="events-table__td">
             <div class="events-table__type">
               {{ event.type }}
@@ -68,15 +82,11 @@
   [draggable]="false"
   [resizable]="false"
 >
-  @switch (typeDialog()) {
-    @case ('base') {
-      <app-base-event-form (formResult)="formResult($event)" />
-    }
-    @case ('sport') {
-      <app-sport-event-form (formResult)="formResult($event)" />
-    }
-    @case ('music') {
-      <app-music-event-form (formResult)="formResult($event)" />
-    }
-  }
+  @switch (typeDialog()) { @case ('base') {
+  <app-base-event-form [eventForEdit]="eventForEdit()" (formResult)="formResult($event)" />
+  } @case ('sport') {
+  <app-sport-event-form [eventForEdit]="eventForEdit()" (formResult)="formResult($event)" />
+  } @case ('music') {
+  <app-music-event-form [eventForEdit]="eventForEdit()" (formResult)="formResult($event)" />
+  } }
 </p-dialog>

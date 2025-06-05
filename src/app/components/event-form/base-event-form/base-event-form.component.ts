@@ -24,10 +24,12 @@ import { IEvent } from '../../../shared/models/IEvent';
   styleUrl: './base-event-form.component.scss',
 })
 export class BaseEventFormComponent implements OnInit {
-  formResult = output<any>();
+  formResult = output<IEvent | null>();
   extraFields = input<TemplateRef<any> | null>(null);
   extraControls = input<Record<string, any> | undefined>();
-  eventForm!: FormGroup;
+  eventForEdit = input<IEvent | null | undefined>();
+
+  protected eventForm!: FormGroup;
 
   constructor(private fb: FormBuilder) {}
 
@@ -37,28 +39,40 @@ export class BaseEventFormComponent implements OnInit {
 
   private initForm() {
     this.eventForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required, Validators.minLength(3)]],
-      location: ['', [Validators.required, Validators.minLength(3)]],
+      title: [this.eventForEdit()?.title || '', [Validators.required, Validators.minLength(3)]],
+      description: [this.eventForEdit()?.description || '', [Validators.required, Validators.minLength(3)]],
+      location: [this.eventForEdit()?.description || '', [Validators.required, Validators.minLength(3)]],
     });
 
     const extra = this.extraControls();
     if (extra) {
       for (const [key, value] of Object.entries(extra)) {
-        this.eventForm.addControl(
-          key,
-          this.fb.control(value)
-        );
+        this.eventForm.addControl(key, this.fb.control(value));
       }
     }
   }
 
-  onSubmit() {
+  protected onSubmit() {
     const formData: IEvent = this.eventForm.value;
     this.formResult.emit(formData);
+
+    const defaultValues: Record<string, any> = {
+      title: '',
+      description: '',
+      location: '',
+    };
+
+    const extra = this.extraControls();
+    if (extra) {
+      for (const [key, value] of Object.entries(extra)) {
+        defaultValues[key] = Array.isArray(value) ? value[0] : value;
+      }
+    }
+
+    this.eventForm.reset(defaultValues);
   }
 
-  onCancel() {
+  protected onCancel() {
     this.formResult.emit(null);
   }
 }
