@@ -39,9 +39,18 @@ export class BaseEventFormComponent implements OnInit {
 
   private initForm() {
     this.eventForm = this.fb.group({
-      title: [this.eventForEdit()?.title || '', [Validators.required, Validators.minLength(3)]],
-      description: [this.eventForEdit()?.description || '', [Validators.required, Validators.minLength(3)]],
-      location: [this.eventForEdit()?.description || '', [Validators.required, Validators.minLength(3)]],
+      title: [
+        this.eventForEdit()?.title || '',
+        [Validators.required, Validators.minLength(3)],
+      ],
+      description: [
+        this.eventForEdit()?.description || '',
+        [Validators.required, Validators.minLength(3)],
+      ],
+      location: [
+        this.eventForEdit()?.location || '',
+        [Validators.required, Validators.minLength(3)],
+      ],
     });
 
     const extra = this.extraControls();
@@ -54,8 +63,11 @@ export class BaseEventFormComponent implements OnInit {
 
   protected onSubmit() {
     const formData: IEvent = this.eventForm.value;
+    this.resetForm();
     this.formResult.emit(formData);
+  }
 
+  resetForm() {
     const defaultValues: Record<string, any> = {
       title: '',
       description: '',
@@ -63,6 +75,7 @@ export class BaseEventFormComponent implements OnInit {
     };
 
     const extra = this.extraControls();
+
     if (extra) {
       for (const [key, value] of Object.entries(extra)) {
         defaultValues[key] = Array.isArray(value) ? value[0] : value;
@@ -73,6 +86,7 @@ export class BaseEventFormComponent implements OnInit {
   }
 
   protected onCancel() {
+    this.resetForm();
     this.formResult.emit(null);
   }
 }

@@ -6,6 +6,7 @@ import { DialogModule } from 'primeng/dialog';
 import { BaseEventFormComponent } from '../event-form/base-event-form/base-event-form.component';
 import { SportEventFormComponent } from '../event-form/sport-event-form/sport-event-form.component';
 import { MusicEventFormComponent } from '../event-form/music-event-form/music-event-form.component';
+import { TextComponent } from "../text/text.component";
 
 export const mockEvents: IEvent[] = [
   {
@@ -54,7 +55,8 @@ type TTypeTitle = '' | 'спортивное' | 'музыкальное';
     BaseEventFormComponent,
     SportEventFormComponent,
     MusicEventFormComponent,
-  ],
+    TextComponent
+],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
 })
@@ -107,10 +109,10 @@ export class EventListComponent implements OnInit {
 
     if (event && this.eventForEdit()) {
       event.id = (this.eventForEdit() as IEvent).id;
-      this.eventForEdit.set(null);
       this.saveEditEvent(event);
     }
 
+    this.eventForEdit.set(null);
     this.visible = false;
   }
 

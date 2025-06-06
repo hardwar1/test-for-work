@@ -72,6 +72,8 @@
       </tbody>
     </table>
   </div>
+
+  <app-text />
 </div>
 
 <p-dialog
@@ -81,6 +83,7 @@
   [style]="{ width: '800px' }"
   [draggable]="false"
   [resizable]="false"
+  [closable]="false"
 >
   @switch (typeDialog()) { @case ('base') {
   <app-base-event-form [eventForEdit]="eventForEdit()" (formResult)="formResult($event)" />

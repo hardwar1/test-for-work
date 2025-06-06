@@ -1,7 +1,10 @@
 <app-base-event-form
+  #baseForm
   [extraFields]="sportTemplate"
   [eventForEdit]="eventForEdit()"
-  [extraControls]="{ genreMusic: [eventForEdit()?.genreMusic || '', Validators.required] }"
+  [extraControls]="{
+    genreMusic: [eventForEdit()?.genreMusic || '', Validators.required]
+  }"
   (formResult)="formResult.emit($event)"
 ></app-base-event-form>
 
@@ -10,7 +13,7 @@
     <label class="form__label" for="genreMusic">Жанр музыки *</label>
     <input
       pInputText
-      type="number"
+      type="text"
       id="genreMusic"
       formControlName="genreMusic"
       class="form__input"
